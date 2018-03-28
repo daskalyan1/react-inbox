@@ -4,8 +4,18 @@ const Message = ({messageItem, onChange, onStarred}) => {
 
     const handleOnChange = (e) => {onChange(e.target.name, e.target.checked)}
     const handleOnStarred = (id, starred) => {onStarred(id, starred)}
+    const handleMessageClass = (e) => {
+                                        let classDesc
+                                        if (e.read)
+                                            classDesc = 'row message read'
+                                        else
+                                            classDesc = 'row message unread'
+                                        if (e.selected)
+                                            classDesc = classDesc + ' row message selected'
+                                        return classDesc
+                                        }
     return(
-        <div className={messageItem.selected ? 'row message read selected' : messageItem.read ? 'row message read' : 'row message unread'}>
+        <div className={handleMessageClass(messageItem)}>
             <div className="col-xs-1">
                 <div className="row">
                     <div className="col-xs-2">

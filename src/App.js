@@ -3,17 +3,92 @@ import './App.css';
 import AddMessageForm from "./AddMessageForm";
 import Messages from "./Messages";
 
+
+const initialMessageData =
+[
+    {
+        id: 1,
+        subject: "You can't input the protocol without calculating the mobile RSS protocol!",
+        body:"",
+        read: false,
+        starred: true,
+        selected:false,
+        labels: ["dev", "personal"]
+    },
+    {
+        id: 2,
+        subject: "connecting the system won't do anything, we need to input the mobile AI panel!",
+        body:"",
+        read: false,
+        starred: false,
+        selected:true,
+        labels: []
+    },
+    {
+        id: 3,
+        subject: "Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!",
+        body:"",
+        read: false,
+        starred: true,
+        selected:false,
+        labels: ["dev"]
+    },
+    {
+        id: 4,
+        subject: "We need to program the primary TCP hard drive!",
+        body:"",
+        read: true,
+        starred: false,
+        selected:true,
+        labels: []
+    },
+    {
+        id: 5,
+        subject: "If we override the interface, we can get to the HTTP feed through the virtual EXE interface!",
+        body:"",
+        read: false,
+        starred: false,
+        selected:false,
+        labels: ["personal"]
+    },
+    {
+        id: 6,
+        subject: "We need to back up the wireless GB driver!",
+        body:"",
+        read: true,
+        starred: true,
+        selected:false,
+        labels: []
+    },
+    {
+        id: 7,
+        subject: "We need to index the mobile PCI bus!",
+        read: true,
+        starred: false,
+        selected:false,
+        labels: ["dev", "personal"]
+    },
+    {
+        id: 8,
+        subject: "If we connect the sensor, we can get to the HDD port through the redundant IB firewall!",
+        read: true,
+        starred: true,
+        selected:false,
+        labels: []
+    }
+]
+
 class MessageApp extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            messages: [],
+            messages: initialMessageData,
         }
     }
 
     addMessage = (message) => {
         message.id = this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0) + 1
-        console.log('id', this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0))
+        //console.log('id', this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0))
         this.setState({
             messages: this.state.messages.concat(message)
         })
