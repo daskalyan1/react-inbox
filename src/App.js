@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import AddMessageForm from "./AddMessageForm";
-import Messages from "./Messages";
-
+import AddMessageForm from "./components/AddMessageForm";
+import Messages from "./components/Messages";
+import Toolbar from "./components/Toolbar";
 
 const initialMessageData =
 [
@@ -193,7 +193,10 @@ class MessageApp extends React.Component {
         return (
         <div>
             <AddMessageForm messageAdded={this.addMessage}/>
-            <Messages messages={this.state.messages} itemChecked={this.itemChecked} itemStarred={this.itemStarred} itemRead={this.itemRead} itemUnread={this.itemUnread} itemDeleted={this.itemDeleted} itemLabeled={this.itemLabeled} itemUnlabeled={this.itemUnlabeled} checkUncheckAll={this.checkUncheckAll}/>
+            <div className="container">
+                <Toolbar messages={this.state.messages} itemRead={this.itemRead} itemUnread={this.itemUnread} itemDeleted={this.itemDeleted} itemLabeled={this.itemLabeled} itemUnlabeled={this.itemUnlabeled} checkUncheckAll={this.checkUncheckAll}/>
+                <Messages messages={this.state.messages} itemChecked={this.itemChecked} itemStarred={this.itemStarred}/>
+            </div>
         </div>
         )
     }
