@@ -4,95 +4,36 @@ import AddMessageForm from "./components/AddMessageForm";
 import Messages from "./components/Messages";
 import Toolbar from "./components/Toolbar";
 
-const initialMessageData =
-[
-    {
-        id: 1,
-        subject: "You can't input the protocol without calculating the mobile RSS protocol!",
-        body:"",
-        read: false,
-        starred: true,
-        selected:false,
-        labels: ["dev", "personal"]
-    },
-    {
-        id: 2,
-        subject: "connecting the system won't do anything, we need to input the mobile AI panel!",
-        body:"",
-        read: false,
-        starred: false,
-        selected:true,
-        labels: []
-    },
-    {
-        id: 3,
-        subject: "Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!",
-        body:"",
-        read: false,
-        starred: true,
-        selected:false,
-        labels: ["dev"]
-    },
-    {
-        id: 4,
-        subject: "We need to program the primary TCP hard drive!",
-        body:"",
-        read: true,
-        starred: false,
-        selected:true,
-        labels: []
-    },
-    {
-        id: 5,
-        subject: "If we override the interface, we can get to the HTTP feed through the virtual EXE interface!",
-        body:"",
-        read: false,
-        starred: false,
-        selected:false,
-        labels: ["personal"]
-    },
-    {
-        id: 6,
-        subject: "We need to back up the wireless GB driver!",
-        body:"",
-        read: true,
-        starred: true,
-        selected:false,
-        labels: []
-    },
-    {
-        id: 7,
-        subject: "We need to index the mobile PCI bus!",
-        read: true,
-        starred: false,
-        selected:false,
-        labels: ["dev", "personal"]
-    },
-    {
-        id: 8,
-        subject: "If we connect the sensor, we can get to the HDD port through the redundant IB firewall!",
-        read: true,
-        starred: true,
-        selected:false,
-        labels: []
-    }
-]
-
 class MessageApp extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            messages: initialMessageData,
+            composeFormOpenState:false,
+            messages: [],
         }
     }
 
-    addMessage = (message) => {
-        message.id = this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0) + 1
+    async addMessage(message){
+        //message.id = this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0) + 1
         //console.log('id', this.state.messages.reduce((accumulator, currentValue) => Math.max(accumulator, currentValue.id), 0))
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'POST',
+            body: JSON.stringify({
+                                subject: message.subject,
+                                body: message.body
+                                }),
+            headers:{
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                    }
+            })
+        const newMessage = await response.json()
+        message.id = newMessage.id
+
         this.setState({
-            messages: this.state.messages.concat(message)
+            messages: this.state.messages.concat(message),
+            composeFormOpenState:false
         })
-        console.log('messages:', this.state.messages)
     }
 
     itemChecked = (id, checked) => {
@@ -103,7 +44,21 @@ class MessageApp extends React.Component {
         })
     }
 
-    itemStarred = (id, starred) => {
+    async itemStarred(id, starred){
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                            messageIds: [id],
+                            command: "star",
+                            star: starred?false:true
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+
         const messageItems = this.state.messages
         starred ? messageItems[messageItems.findIndex(e => (e.id.toString() ===id.toString()))].starred=false : messageItems[messageItems.findIndex(e => (e.id.toString() ===id.toString()))].starred=true
         this.setState({
@@ -111,51 +66,124 @@ class MessageApp extends React.Component {
         })
     }
 
-    itemRead = () => {
+    async itemRead(){
+        const messageIDs = []
         const messageItems = this.state.messages
-        messageItems.map(messageItem => {if (messageItem.selected === true) messageItem.read=true})
+        messageItems.map(messageItem => {if (messageItem.selected === true) {messageItem.read=true; messageIDs.push(messageItem.id)}})
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                messageIds: messageIDs,
+                command: "read",
+                read: true
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
         this.setState({
             messages:messageItems
         })
     }
 
-    itemUnread = () => {
+    async itemUnread(){
+        const messageIDs = []
         const messageItems = this.state.messages
-        messageItems.map(messageItem => {if (messageItem.selected === true) messageItem.read=false})
+        messageItems.map(messageItem => {if (messageItem.selected === true) {messageItem.read=false; messageIDs.push(messageItem.id)}})
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                messageIds: messageIDs,
+                command: "read",
+                read: false
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
         this.setState({
             messages:messageItems
         })
     }
 
-    itemDeleted = () => {
+    async itemDeleted(){
+        const messageIDs = []
         const messageItems = this.state.messages
+        messageItems.map(messageItem => {if (messageItem.selected === true) messageIDs.push(messageItem.id)})
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                messageIds: messageIDs,
+                command: "delete"
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
         this.setState({
             messages:messageItems.filter(messageItem => messageItem.selected === false)
         })
     }
 
-    itemLabeled = (selectedLabel) => {
+    async itemLabeled(selectedLabel){
+        const messageIDs = []
         const messageItems = this.state.messages
         messageItems.map(messageItem => {
                                 if (messageItem.selected === true){
                                     if (messageItem.labels.findIndex(e => (e === selectedLabel)) === -1){
                                         messageItem.labels = messageItem.labels.concat(selectedLabel)
+                                        messageIDs.push(messageItem.id)
                                     }
                                 }
         })
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                messageIds: messageIDs,
+                command: "addLabel",
+                label:selectedLabel
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+
         this.setState({
             messages:messageItems
         })
     }
 
-    itemUnlabeled = (selectedLabel) => {
+    async itemUnlabeled(selectedLabel){
+        const messageIDs = []
         const messageItems = this.state.messages
         messageItems.map(messageItem => {
             if (messageItem.selected === true){
                 let labelIndex = messageItem.labels.findIndex(e => (e === selectedLabel))
                 if (labelIndex !== -1){
                     messageItem.labels.splice(labelIndex, 1)
+                    messageIDs.push(messageItem.id)
                 }
+            }
+        })
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+                messageIds: messageIDs,
+                command: "removeLabel",
+                label:selectedLabel
+            }),
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             }
         })
         this.setState({
@@ -188,14 +216,27 @@ class MessageApp extends React.Component {
         })
     }
 
+    composeFormOpenClose = () => {
+        if (this.state.composeFormOpenState) {this.setState({composeFormOpenState: false})} else this.setState({composeFormOpenState: true})
+    }
+
+    async componentDidMount(){
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`)
+        const json = await response.json()
+        this.setState({
+            messages:json._embedded.messages.map(message => {message.selected = false; return message})
+        })
+        //console.log("message1:", json._embedded.messages.map(message => {message.selected = false; return message}))
+    }
+
     render() {
         console.log('Messages2', this.state.messages)
         return (
         <div>
-            <AddMessageForm messageAdded={this.addMessage}/>
+            <AddMessageForm messageAdded={this.addMessage.bind(this)} showComposeForm={this.state.composeFormOpenState}/>
             <div className="container">
-                <Toolbar messages={this.state.messages} itemRead={this.itemRead} itemUnread={this.itemUnread} itemDeleted={this.itemDeleted} itemLabeled={this.itemLabeled} itemUnlabeled={this.itemUnlabeled} checkUncheckAll={this.checkUncheckAll}/>
-                <Messages messages={this.state.messages} itemChecked={this.itemChecked} itemStarred={this.itemStarred}/>
+                <Toolbar messages={this.state.messages} itemRead={this.itemRead.bind(this)} itemUnread={this.itemUnread.bind(this)} itemDeleted={this.itemDeleted.bind(this)} itemLabeled={this.itemLabeled.bind(this)} itemUnlabeled={this.itemUnlabeled.bind(this)} checkUncheckAll={this.checkUncheckAll} composeFormOpenClose={this.composeFormOpenClose}/>
+                <Messages messages={this.state.messages} itemChecked={this.itemChecked} itemStarred={this.itemStarred.bind(this)}/>
             </div>
         </div>
         )

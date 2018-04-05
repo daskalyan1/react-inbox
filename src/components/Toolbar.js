@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, itemUnlabeled, checkUncheckAll}) => {
+const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, itemUnlabeled, checkUncheckAll, composeFormOpenClose}) => {
 
     const handleOnSelectLabel = (e) => {itemLabeled(e.target.value)}
     const handleOnUnselectLabel = (e) => {itemUnlabeled(e.target.value)}
@@ -12,8 +12,12 @@ const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, item
                     <span className="badge badge">{messages.filter(message => message.read === false).length}</span>unread messages
                 </p>
 
-                <button className="btn btn-default">
-                    <i onClick={checkUncheckAll} className={(messages.filter(message => message.selected === true).length) === messages.length && messages.length >0 ? 'fa fa-check-square-o' : messages.filter(message => message.selected === true).length ===0 ? 'fa fa-square-o' : 'fa fa-minus-square-o'}></i>
+                <a class="btn btn-danger" onClick={composeFormOpenClose}>
+                    <i class="fa fa-plus"></i>
+                </a>
+
+                <button className="btn btn-default" onClick={checkUncheckAll}>
+                    <i className={(messages.filter(message => message.selected === true).length) === messages.length && messages.length >0 ? 'fa fa-check-square-o' : messages.filter(message => message.selected === true).length ===0 ? 'fa fa-square-o' : 'fa fa-minus-square-o'}></i>
                 </button>
 
                 <button className="btn btn-default" onClick={itemRead} disabled={messages.findIndex(e => (e.selected ===true)) === -1 ? "disabled": false}>
