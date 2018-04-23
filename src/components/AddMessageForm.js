@@ -1,4 +1,7 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import {sendMessage} from "../actions";
 
 const AddMessageForm = ({messageAdded, showComposeForm}) => {
 
@@ -45,4 +48,15 @@ const AddMessageForm = ({messageAdded, showComposeForm}) => {
             else
                 return ""
 }
-export default AddMessageForm
+
+const mapStateToProps = state => ({
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    messageAdded:sendMessage
+}, dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+) (AddMessageForm)

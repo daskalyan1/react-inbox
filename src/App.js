@@ -3,9 +3,14 @@ import './App.css';
 import AddMessageForm from "./components/AddMessageForm";
 import Messages from "./components/Messages";
 import Toolbar from "./components/Toolbar";
+import store from './store';
+import { connect} from 'react-redux';
+import { bindActionCreators} from 'redux';
+import { getMessages} from './actions';
 
 class MessageApp extends React.Component {
-    constructor(props){
+
+    /*constructor(props){
         super(props)
         this.state = {
             composeFormOpenState:false,
@@ -226,21 +231,39 @@ class MessageApp extends React.Component {
         this.setState({
             messages:json._embedded.messages.map(message => {message.selected = false; return message})
         })
-        //console.log("message1:", json._embedded.messages.map(message => {message.selected = false; return message}))
+    }*/
+
+    componentDidMount() {
+        //store.dispatch(getMessages())
+        this.props.getMessages()
     }
 
     render() {
-        console.log('Messages2', this.state.messages)
+       // console.log('Messages2', this.props.messages)
+
         return (
-        <div>
-            <AddMessageForm messageAdded={this.addMessage.bind(this)} showComposeForm={this.state.composeFormOpenState}/>
-            <div className="container">
-                <Toolbar messages={this.state.messages} itemRead={this.itemRead.bind(this)} itemUnread={this.itemUnread.bind(this)} itemDeleted={this.itemDeleted.bind(this)} itemLabeled={this.itemLabeled.bind(this)} itemUnlabeled={this.itemUnlabeled.bind(this)} checkUncheckAll={this.checkUncheckAll} composeFormOpenClose={this.composeFormOpenClose}/>
-                <Messages messages={this.state.messages} itemChecked={this.itemChecked} itemStarred={this.itemStarred.bind(this)}/>
-            </div>
-        </div>
+            (this.props.messages.length > 0) ? (
+            <div>
+                <AddMessageForm showComposeForm={this.props.composeFormOpenState}/>
+                <div className="container">
+                    <Toolbar messages={this.props.messages} />
+                    <Messages messages={this.props.messages}/>
+                </div>
+            </div>) : ''
         )
     }
 }
 
-export default MessageApp;
+const mapStateToProps = state => ({
+    messages: state.messages.messages,
+    composeFormOpenState: state.messages.composeFormOpenState
+})
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+    getMessages
+},dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+) (MessageApp)

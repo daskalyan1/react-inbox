@@ -1,4 +1,10 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators} from 'redux'
+import {
+    checkUncheckAllMessages, deleteMessage, labelMessage, markMessageRead, markMessageUnRead,
+    unlabelMessage
+} from "../actions";
 
 const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, itemUnlabeled, checkUncheckAll, composeFormOpenClose}) => {
 
@@ -48,4 +54,21 @@ const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, item
             </div>
         </div>)
 }
-export default Toolbar
+
+const mapStateToProps = (state) => ({
+    //messages: state.messages
+})
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+    itemRead: markMessageRead,
+    itemUnread: markMessageUnRead,
+    itemDeleted:deleteMessage,
+    itemLabeled:labelMessage,
+    itemUnlabeled:unlabelMessage,
+    checkUncheckAll:checkUncheckAllMessages
+}, dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+) (Toolbar)
