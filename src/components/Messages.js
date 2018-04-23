@@ -6,7 +6,7 @@ const Messages = ({messages}) => {
     console.log('Messages3', messages)
     return (
         <div className="collection">
-            {messages.map(message => <Message key={message.id} messageItem={message} id={message.id}/>)}
+            {messages.map(message => <Message key={message.id} id={message.id}/>)}
         </div>)
 }
 

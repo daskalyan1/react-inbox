@@ -57,9 +57,9 @@ const mapStateToProps = (state, ownProps) => {
    // // console.log('state', state)
    // // console.log('props', ownProps)
    //  console.log('message item',  state.messages.messages.find(message => message.id === ownProps.id))
-   //  return {
+   return {
         messageItem: state.messages.messages.find(message => message.id === ownProps.id)
-   // }
+   }
     //console.log("StateMsg", msg)
     //return {msg}
     //id: state.messages[ownProps.id].id
