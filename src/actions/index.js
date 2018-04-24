@@ -79,7 +79,7 @@ export const markMessageRead = () => {
     return async (dispatch, getState) =>{
 
         const messageIDs = []
-        const messageItems = getState().messages
+        const messageItems = getState().messages.messages
         //console.log("MessageStore", messageIt)
         messageItems.map(messageItem => {if (messageItem.selected === true) {messageItem.read=true; messageIDs.push(messageItem.id)}})
 
@@ -110,7 +110,7 @@ export const markMessageUnRead = () => {
     return async (dispatch, getState) =>{
 
         const messageIDs = []
-        const messageItems = getState().messages
+        const messageItems = getState().messages.messages
     //    console.log("MessageStore", messageItems)
         messageItems.map(messageItem => {if (messageItem.selected === true) {messageItem.read=false; messageIDs.push(messageItem.id)}})
 
@@ -140,7 +140,7 @@ export const deleteMessage = () => {
     return async (dispatch, getState) =>{
 
         const messageIDs = []
-        const messageItems = getState().messages
+        const messageItems = getState().messages.messages
         messageItems.map(messageItem => {if (messageItem.selected === true) messageIDs.push(messageItem.id)})
 
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/messages`, {
@@ -168,7 +168,7 @@ export const labelMessage = (selectedLabel) => {
     return async (dispatch, getState) =>{
 
         const messageIDs = []
-        const messageItems = getState().messages
+        const messageItems = getState().messages.messages
         messageItems.map(messageItem => {
             if (messageItem.selected === true){
                 if (messageItem.labels.findIndex(e => (e === selectedLabel)) === -1){
@@ -204,7 +204,7 @@ export const unlabelMessage = (selectedLabel) => {
     return async (dispatch, getState) =>{
 
         const messageIDs = []
-        const messageItems = getState().messages
+        const messageItems = getState().messages.messages
         messageItems.map(messageItem => {
             if (messageItem.selected === true){
                 let labelIndex = messageItem.labels.findIndex(e => (e === selectedLabel))
@@ -241,6 +241,16 @@ export const checkUncheckAllMessages = () => {
     return async (dispatch) => {
         dispatch({
             type:MESSAGE_CHECKUNCHECK_ALL
+        })
+    }
+}
+
+export const MESSAGE_CREATE_FORM_OPEN_CLOSE = 'MESSAGE_CreateFormOpenClose'
+export const messageCreateFormOpenClose = () => {
+
+    return async (dispatch) => {
+        dispatch({
+            type:MESSAGE_CREATE_FORM_OPEN_CLOSE
         })
     }
 }

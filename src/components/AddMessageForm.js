@@ -50,6 +50,7 @@ const AddMessageForm = ({messageAdded, showComposeForm}) => {
 }
 
 const mapStateToProps = state => ({
+    showComposeForm:state.messages.composeFormOpenState
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({

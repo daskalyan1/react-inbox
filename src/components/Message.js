@@ -7,8 +7,8 @@ const Message = ({messageItem, onChange, onStarred}) => {
 
     console.log('rendered', messageItem)
 
-    const handleOnChange = (e) => {
-        onChange(e.target.name, e.target.checked)
+    const handleOnChange = (id, e) => {
+        onChange(id, e.target.checked)
     }
     const handleOnStarred = (id, starred) => {
         onStarred(id, starred)
@@ -29,7 +29,7 @@ const Message = ({messageItem, onChange, onStarred}) => {
                 <div className="col-xs-1">
                     <div className="row">
                         <div className="col-xs-2">
-                            <input type="checkbox" defaultChecked={messageItem.selected} onChange={handleOnChange}
+                            <input type="checkbox" defaultChecked={messageItem.selected} onChange={(e)  => handleOnChange(messageItem.id, e)}
                                    name={messageItem.id} checked={messageItem.selected ? true : false}/>
                         </div>
                         <div className="col-xs-2">
@@ -54,15 +54,9 @@ const Message = ({messageItem, onChange, onStarred}) => {
 //}
 
 const mapStateToProps = (state, ownProps) => {
-   // // console.log('state', state)
-   // // console.log('props', ownProps)
-   //  console.log('message item',  state.messages.messages.find(message => message.id === ownProps.id))
    return {
         messageItem: state.messages.messages.find(message => message.id === ownProps.id)
    }
-    //console.log("StateMsg", msg)
-    //return {msg}
-    //id: state.messages[ownProps.id].id
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({

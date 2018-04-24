@@ -1,10 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators} from 'redux'
-import {
-    checkUncheckAllMessages, deleteMessage, labelMessage, markMessageRead, markMessageUnRead,
-    unlabelMessage
-} from "../actions";
+import { checkUncheckAllMessages, deleteMessage, labelMessage, markMessageRead, markMessageUnRead, messageCreateFormOpenClose, unlabelMessage } from "../actions";
 
 const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, itemUnlabeled, checkUncheckAll, composeFormOpenClose}) => {
 
@@ -56,7 +53,7 @@ const Toolbar = ({messages, itemRead, itemUnread, itemDeleted, itemLabeled, item
 }
 
 const mapStateToProps = (state) => ({
-    //messages: state.messages
+    messages: state.messages.messages
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
@@ -65,7 +62,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     itemDeleted:deleteMessage,
     itemLabeled:labelMessage,
     itemUnlabeled:unlabelMessage,
-    checkUncheckAll:checkUncheckAllMessages
+    checkUncheckAll:checkUncheckAllMessages,
+    composeFormOpenClose:messageCreateFormOpenClose
 }, dispatch)
 
 export default connect(

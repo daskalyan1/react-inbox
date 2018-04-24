@@ -4,14 +4,19 @@ import { connect } from 'react-redux'
 
 const Messages = ({messages}) => {
     console.log('Messages3', messages)
-    return (
-        <div className="collection">
-            {messages.map(message => <Message key={message.id} id={message.id}/>)}
-        </div>)
+    if (messages){
+        return (
+            <div className="collection">
+                {messages.map(message => <Message key={message.id} id={message.id}/>)}
+            </div>)
+    }
+    else {
+        return null
+    }
 }
 
 const mapStateToProps = (state)  => {
-    messages: state.messages.messages
+    return {messages: state.messages.messages}
 }
 export default connect(
     mapStateToProps,
