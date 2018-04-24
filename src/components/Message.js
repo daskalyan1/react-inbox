@@ -5,8 +5,6 @@ import {starUnStarMessage, checkUnCheckMessage} from '../actions'
 
 const Message = ({messageItem, onChange, onStarred}) => {
 
-    console.log('rendered', messageItem)
-
     const handleOnChange = (id, e) => {
         onChange(id, e.target.checked)
     }

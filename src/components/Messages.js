@@ -3,7 +3,6 @@ import Message from "./Message";
 import { connect } from 'react-redux'
 
 const Messages = ({messages}) => {
-    console.log('Messages3', messages)
     if (messages){
         return (
             <div className="collection">

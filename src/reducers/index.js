@@ -27,19 +27,10 @@ function messages(state = initialState, action) {
                     selected: false
                 }
             ]
-            console.log("NewMessageArray", newMessageArray)
-
             return {
                 composeFormOpenState:false,
                 messages: [...newMessageArray]
             }
-            //return [
-            //    ...state,
-            //    {
-            //        ...action.message,
-            //        selected: false
-            //    }
-            //]
         case MESSAGE_STARRED:
             const newMessageState = state.messages.map(messageItem => {
                     if (messageItem.id !== action.id)
@@ -76,8 +67,6 @@ function messages(state = initialState, action) {
                 else
                     return messageItem
             })
-            console.log("MessageItem", checkedUncheckedMessages)
-            //state[state.findIndex(e => (e.id.toString() ===action.id.toString()))].selected=action.checked
             return {
                 ...state,
                 messages: [...checkedUncheckedMessages]
@@ -146,7 +135,6 @@ function messages(state = initialState, action) {
                            ...messageItem,
                            labels: [...messageItem.labels]
                        }
-                        //messageItem.labels.splice(labelIndex, 1)
                     }
                     else
                         return messageItem
@@ -171,7 +159,6 @@ function messages(state = initialState, action) {
                             ...messageItem,
                             selected:false
                         }
-                        //messageItem.selected=false})
                     })
                 }
                 else{
@@ -182,7 +169,6 @@ function messages(state = initialState, action) {
                                 ...messageItem,
                                 selected:true
                             }
-                            //messageItem.selected=true
                         })
                     }
                     else{
