@@ -52,9 +52,11 @@ const Message = ({messageItem, onChange, onStarred}) => {
 //}
 
 const mapStateToProps = (state, ownProps) => {
-   return {
-        messageItem: state.messages.messages.find(message => message.id === ownProps.id)
-   }
+    const messageIndex = state.messages.messages.findIndex(message => message.id === ownProps.id)
+    return {
+        messageItem:state.messages.messages[messageIndex]
+        //messageItem: state.messages.messages.find(message => message.id === ownProps.id)
+    }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({

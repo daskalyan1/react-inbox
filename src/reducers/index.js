@@ -37,17 +37,9 @@ function messages(state = initialState, action) {
                         return messageItem
                     else
                     {
-                        if (messageItem.starred === true) {
-                            return {
-                                ...messageItem,
-                                starred:false
-                            }
-                        }
-                        else{
-                            return {
-                                ...messageItem,
-                                starred:true
-                            }
+                        return {
+                            ...messageItem,
+                            starred:!messageItem.starred
                         }
                     }
                 })
